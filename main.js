@@ -126,7 +126,7 @@ app.post('/deleteData', async (req, res) => {
 app.post('/updateTeacher', (req, res) => {
     //create a endpoint for updating teacher's data: Mainly Payment status
 })
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server started at port: ${PORT}`)
 });
