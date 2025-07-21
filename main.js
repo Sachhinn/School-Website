@@ -19,7 +19,20 @@ cron.schedule("0 0 0 1 * *", async () => {
 }, {
     timezone: "Asia/Kolkata"
 })
+app.use((req, res, next) => {
+  const visit = {
+    ip: req.ip,
+    path: req.originalUrl,
+    userAgent: req.headers['user-agent'],
+    time: new Date()
+  };
 
+  // assuming you have a Visit model or collection
+  sm.collection('visits').insertOne(visit);
+  console.log(`A visit was made to your website:`)
+  console.log(visit)
+  next();
+});
 app.get('/', async (req, res) => {
     const students = await countItem('Students');
     const teachers = await countItem('Teachers');
