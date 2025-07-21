@@ -26,11 +26,9 @@ app.use((req, res, next) => {
     userAgent: req.headers['user-agent'],
     time: new Date()
   };
-
-  // assuming you have a Visit model or collection
   sm.collection('visits').insertOne(visit);
   console.log(`A visit was made to your website:`)
-  console.log(visit)
+  console.log(visit.ip)
   next();
 });
 app.get('/', async (req, res) => {

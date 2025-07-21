@@ -1,118 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>School Management</title>
-    <link rel="stylesheet" href="./css/index.css" />
-  </head>
-  <body>
-    <!-- <div class="main">
-      <nav>
-        <h1>School Management Application</h1>
-      </nav>
-      <main>
-        <div class="screen"></div>
-        <div class="screen2"></div>
-        <div class="input">
-          <label for="name-input">Enter Name:</label>
-          <input
-            type="text"
-            id="name-input"
-            autocomplete="on"
-            placeholder="Name"
-            class="forms"
-            name="name"
-          />
-          <label for="email-input">Enter Email:</label>
-          <input
-            type="email"
-            id="email-input"
-            autocomplete="on"
-            placeholder="Email"
-            class="forms"
-            name="name"
-          />
-        </div>
-        <div class="buttons">
-          <button onclick="readData();">READ</button>
-          <button onclick="createData();">CREATE</button>
-          <button onclick="updateData();">UPDATE</button>
-          <button onclick="deleteData();">DELETE</button>
-        </div>
-      </main>
-    </div> -->
 
-    <body>
-    <div class="main">
-      <%- include('template/side-panel') %>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>School Management</title>
+  <link rel="stylesheet" href="./css/index.css" />
+</head>
+
+<body>
+  <div class="main">
+    <%- include('template/side-panel') %>
       <%- include('template/navbar') %>
-      <div class="main-panel">
-        <div class="main-section">
-            <li class="dashboard"><h3 >Dashboard</h3></li>
-            <li class="cards">
-                <span class="card-content">
-                    <p class="content-p1">Students</p>
-                    <p class="content-p2"></p>
-                </span>
-                <span class="card-icon"><img style="width: 100%;" src="img/group_people.svg" alt=""></span>
+        <div class="main-panel">
+          <div class="main-section">
+            <li class="dashboard">
+              <h3>Dashboard</h3>
             </li>
             <li class="cards">
-                <span class="card-content">
-                    <p class="content-p1">Teachers</p>
-                    <p class="content-p2"></p>
-                </span>
-                <span class="card-icon"><img style="width: 100%;" src="img/group_people_green.svg" alt=""></span>
+              <span class="card-content">
+                <p class="content-p1">Students</p>
+                <p class="content-p2"></p>
+              </span>
+              <span class="card-icon"><img style="width: 100%;" src="img/group_people.svg" alt=""></span>
             </li>
             <li class="cards">
-                <span class="card-content">
-                    <p class="content-p1">Clubs</p>
-                    <p class="content-p2">20</p>
-                </span>
-                <span class="card-icon"><img style="width: 100%;" src="img/group_people_cyan.svg" alt=""></span>
+              <span class="card-content">
+                <p class="content-p1">Teachers</p>
+                <p class="content-p2"></p>
+              </span>
+              <span class="card-icon"><img style="width: 100%;" src="img/group_people_green.svg" alt=""></span>
             </li>
             <li class="cards">
-                <span class="card-content">
-                    <p class="content-p1">Books</p>
-                    <p class="content-p2">2000</p>
-                </span>
-                <span class="card-icon"><img style="width: 100%;" src="img/group_people_yellow.svg" alt=""></span>
+              <span class="card-content">
+                <p class="content-p1">Clubs</p>
+                <p class="content-p2">20</p>
+              </span>
+              <span class="card-icon"><img style="width: 100%;" src="img/group_people_cyan.svg" alt=""></span>
+            </li>
+            <li class="cards">
+              <span class="card-content">
+                <p class="content-p1">Books</p>
+                <p class="content-p2">2000</p>
+              </span>
+              <span class="card-icon"><img style="width: 100%;" src="img/group_people_yellow.svg" alt=""></span>
             </li>
             <li id="notice" class="notice">
-                <p class="heading">Upcoming Events</p>
+              <p class="heading">Upcoming Events</p>
             </li>
             <li class="notice">
-                <p class="heading">Notice</p>
-                <div class="notice-section">
-                    <div style="font-weight: 600;" class="notice-list">
-                        <p class="notice-date">28 Oct</p>
-                        <p class="notice-content">Children's Day Event participation</p>
-                    </div>
+              <p class="heading">Notice</p>
+              <div class="notice-section">
+                <div style="font-weight: 600;" class="notice-list">
+                  <p class="notice-date">28 Oct</p>
+                  <p class="notice-content">Children's Day Event participation</p>
                 </div>
+              </div>
             </li>
-            <li class="dashboard"><h3>Staff Payment</h3></li>
-            <li class='notice'>
-                <p class="heading">Paid</p>
-                <p class="notice-section">Mr. Akash </p>
-                <p class="notice-section">Mr. Nandkishor</p>
-                
+            <li class="dashboard">
+              <h3>Staff Payment</h3>
             </li>
             <li class='notice'>
-                <p class="heading">Unpaid</p>
-                <p class="notice-section">Mr.Mukesh</p>
-                <p class="notice-section">Mr.Gukesh</p>
-                <p class="notice-section">Ms.Shivani</p>
+              <p class="heading">Paid</p>
+              <p class="notice-section">Mr. Akash </p>
+              <p class="notice-section">Mr. Nandkishor</p>
+
             </li>
-          </ul>
+            <li class='notice'>
+              <p class="heading">Unpaid</p>
+              <p class="notice-section">Mr.Mukesh</p>
+              <p class="notice-section">Mr.Gukesh</p>
+              <p class="notice-section">Ms.Shivani</p>
+            </li>
+            </ul>
+          </div>
         </div>
-      </div>
-    </div>
-  </body>
-  </body>
-  <script>
-    const eventData = <%- JSON.stringify(events) %>;
-    const students = <%- students %>;
-    const teachers = <%- teachers%>;
-  </script>
-  <script src="index.js"></script>
+  </div>
+</body>
+<script>
+  const eventData = <%- JSON.stringify(events) %>;
+  const students = <%- students %>;
+  const teachers = <%- teachers %>;
+</script>
+<script src="index.js"></script>
+
 </html>

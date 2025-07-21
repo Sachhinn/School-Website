@@ -40,3 +40,13 @@ body{
 .main-panel span{
     margin-right:1em;
 }
+@media screen and (max-width:780px) {
+    .main-panel{
+        display: block;
+    }
+    .main-panel *{
+        margin-bottom: 1em;
+        text-align: justify;
+    }
+    .submit{width:auto}
+}
