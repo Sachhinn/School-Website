@@ -38,3 +38,11 @@
 .current *, .for-update *{
     margin-bottom: 1em;
 }
+@media screen and (max-width:780px) {
+    .main-panel{
+        display:block;
+    }
+    .submit{
+        width:auto;
+    }
+}
