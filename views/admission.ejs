@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard: Admission</title>
+    <link rel="stylesheet" href="./css/index.css" />
+    <link rel="stylesheet" href="./css/admission.css">
+</head>
+
+<body>
+    <div class="main">
+
+        <%- include('template/side-panel'); %>
+            <%- include('template/navbar') %>
+                <div class="main-panel">
+                    <h3 id="heading">Admission</h3>
+                    <div>
+                        <label for="first-name">First Name:</label>
+                        <input type="text" name="name.first" id="first-name">
+                    </div>
+                    <div>
+                        <label for="last-name">Last Name:</label>
+                        <input type="text" name="name.last" id="last-name">
+                    </div>
+                    <div>
+                        <label for="father-name">Father's name</label>
+                        <input type="text" name="father" id="father-name">
+                    </div>
+                    <div>
+                        <label for="standard">Admitting for class:</label>
+                        <input min="1" max="12" type="number" name="" id="standard">
+                    </div>
+                    <div>
+                        <label for="dob">Date of birth:</label>
+                        <input type="date" name="" id="dob">
+                    </div>
+                    <div>
+                        <span>Gender:</span>
+                        <input type="radio" name="gender" id="male" value="Male">
+                        <label for="male">Male</label>
+                        <input type="radio" name="gender" id="female" value="Female">
+                        <label for="female">Female</label>
+                    </div>
+                    <div>
+                        <span>Category:</span>
+                        <input type="radio" name="Category" id="General" value="General">
+                        <label for="General">General</label>
+                        <input type="radio" name="Category" id="OBC" value="OBC">
+                        <label for="OBC">OBC</label>
+                        <input type="radio" name="Category" id="scst" value="SC/ST">
+                        <label for="scst">SC/ST</label>
+                    </div>
+                    <div>
+                        <label for="dob">Admission Date:</label>
+                        <input type="date" name="admissionDate" id="admissionDate">
+                    </div>
+                    <button class="submit" onclick="sendData()">Submit</button>
+                </div>
+    </div>
+</body>
+<script src="admission.js"></script>
+
+</html>

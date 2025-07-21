@@ -1,0 +1,19 @@
+.dashboard h3{
+    text-align: center;
+    grid-column: span 2;
+    margin: 1em 0;
+    font-size: 1.2em;
+    font-family: sans-serif;
+    text-align: center;
+    border-bottom: 1px solid #1f4fef;
+}
+li.cards{
+   grid-column: span 2;
+}
+.notice-section{
+    display:block;
+}
+.listings{
+    display: flex;
+    justify-content: space-between;
+}

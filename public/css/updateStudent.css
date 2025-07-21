@@ -1,0 +1,40 @@
+.main-panel{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background-color: var(--white);
+    min-height: 50vh;
+    height: min-content;
+    align-items: start;
+}
+.main-panel h3{
+    grid-column: span 2;
+    margin: 1em 0;
+    font-size:2em;
+    font-family: sans-serif;
+    text-align: center;
+    border-bottom:1px solid #1f4fef;
+}
+.head{
+    border-bottom: 2px solid var(--purple);
+    width: 50%;
+}
+.submit{
+    display: block;
+    margin:1em auto;
+    font-size: 1.5em;
+    width:10vw;
+    justify-self: center;
+    background-color: var(--purple);
+    cursor: pointer;
+    color:var(--pureWhite);
+    border:2px solid #1f4fef;
+    border-radius: 2px;
+    text-transform: uppercase;
+    grid-column: span 2;
+}
+.hidden{
+    display:none;
+}
+.current *, .for-update *{
+    margin-bottom: 1em;
+}

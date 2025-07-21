@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard: Balance Sheet</title>
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/accounts.css">
+</head>
+
+<body>
+    <div class="main">
+        <%- include('template/side-panel') %>
+            <%- include('template/navbar') %>
+                <div class="main-panel">
+                    <div class="main-section">
+                        <li class="dashboard">
+                            <h3>Accounts Management</h3>
+                        </li>
+
+                        <li class="cards">
+                            <span class="card-content">
+                                <p class="content-p1">Total Balance</p>
+                                <p class="content-p2"><%= sendIncome %></p>
+                            </span>
+                            <span class="card-icon"><img style="width: 100%;" src="img/group_people.svg" alt=""></span>
+                        </li>
+                        <li class="cards">
+                            <span class="card-content">
+                                <p class="content-p1">Expenses</p>
+                                <p class="content-p2"><%= tsSalary+ntsSalary+otherExp%></p>
+                            </span>
+                            <span class="card-icon"><img style="width: 100%;" src="img/group_people.svg" alt=""></span>
+                        </li>
+                        <li id="notice" class="notice">
+                            <p class="heading">Expenses</p>
+                            <div class="notice-section">
+                                <div style="font-weight: 600;" class="notice-list">
+                                    <div class="listings">
+                                        <p class="notice-content">Teacher's Salary Expense</p>
+                                        <p class="notice-date"><%= tsSalary %></p>
+                                    </div>
+                                    <div class="listings">
+                                        <p class="notice-content">Non Teaching Staff Salary Expense</p>
+                                        <p class="notice-date"><%= ntsSalary %></p>
+                                    </div>
+                                    <div class="listings">
+                                        <p class="notice-content">Other Monthly Expenses</p>
+                                        <p class="notice-date"><%= otherExp %></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="notice">
+                            <p class="heading">Income sources</p>
+                            <div class="notice-section">
+                                <div style="font-weight: 600;" class="notice-list">
+                                    <div class="listings">
+                                        <p>Student's Fees </p>
+                                    </div>
+                                    <div class="listings">
+                                        <p>Interest on Balance</p>
+                                    </div>
+                                    <div class="listings">
+                                        <p>Loans</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li id="pendingSalaries" class='notice'>
+                            <p class="heading">Pending Salaries:</p>
+
+                        </li>
+                        <li id="pendingFees" class='notice'>
+                            <p class="heading">Pending Fees: </p>
+                        </li>
+
+                        </ul>
+                    </div>
+                </div>
+    </div>
+</body>
+<script>
+    unpaidTeachers = <%-JSON.stringify(upTeachers)%>
+    unpaidStudents = <%-JSON.stringify(upStudents)%>
+</script>
+<script src="accounts.js"></script>
+</html>
