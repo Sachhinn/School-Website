@@ -139,8 +139,12 @@ app.post('/updateData', async (req, res) => {
     //     }
     //     res.end(JSON.stringify(response))
     // }
-    console.log(response._id)
-    res.end(JSON.stringify(response._id))
+    if(!response){
+        res.status(404).send("No Profile matched the data")
+    }
+    else{
+        res.end(JSON.stringify(response._id))
+    }
 })
 app.post('/deleteData', async (req, res) => {
     let requestedData = req.body;

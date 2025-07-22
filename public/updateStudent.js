@@ -20,7 +20,7 @@ mySelect.addEventListener('change', (event) => {
     document.getElementById('category').classList.add('hidden')
     document.getElementById('paymentStatus').classList.add('hidden')
     updateSelectedOption();
-    if (myValue == "dob" || myValue =="admissionDate") {
+    if (myValue == "dob" || myValue == "admissionDate") {
         myInput.type = "date"
         myLabel.innerHTML = `Update ${mySelect.options[mySelect.selectedIndex].innerHTML}`
     }
@@ -41,12 +41,16 @@ mySelect.addEventListener('change', (event) => {
     }
 })
 
-async function update(person) {
+async function update(coll) {
+    toUpdate = myInput.value
     if (myValue == "gender") {
+        console.log("Gendee is the myvalue")
         const gender = document.getElementsByName('gender')
         gender.forEach(radio => {
             if (radio.checked) {
+                console.log("checked radio found")
                 toUpdate = radio.value;
+                console.log("toupdate: ", toUpdate)
             }
         })
     }
@@ -66,9 +70,6 @@ async function update(person) {
             }
         })
     }
-    else {
-        toUpdate = myInput.value
-    }
     let stud = [
         document.getElementById('first-name').value,
         document.getElementById('last-name').value,
@@ -87,19 +88,24 @@ async function update(person) {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
-            'update': person
+            'update': coll
         },
         body: JSON.stringify(body)
-    }).then(async response =>{
-        response = await response.json()
-        alert(`Profile Updated!!`)
-        window.location.href = `profile/${response}?type=Students`
+    }).then(async response => {
+        if (response.ok) {
+            response = await response.json()
+            alert(`Profile Updated!!`)
+            window.location.href = `profile/${response}?type=${coll}`
+        }
+        else {
+            throw new Error("No Profile matched the data!")
+        }
     }
-    )
+    ).catch(err => alert(err))
 }
 
 async function updateTeacher() {
-        if (myValue == "gender") {
+    if (myValue == "gender") {
         const gender = document.getElementsByName('gender')
         gender.forEach(radio => {
             if (radio.checked) {
@@ -107,7 +113,7 @@ async function updateTeacher() {
             }
         })
     }
-        if (myValue == "paymentStatus") {
+    if (myValue == "paymentStatus") {
         const status = document.getElementsByName('paymentStatus')
         status.forEach(radio => {
             if (radio.checked) {

@@ -35,15 +35,17 @@ export const update = async (coll , obj) =>{
          updatedDoc = await sm.collection('Students').findOneAndUpdate({ name: { first: obj.name.first, last: obj.name.last }, father: obj.father }, { $set: { [obj.toUpdate]: obj.updatedValue } },{returnNewDcoument:true})
         if (!updatedDoc) {
             console.log("No mathced Data to update!")
+            return null;
         }
         else {
             console.log(`${updatedDoc.name.first}'s Profile updated!!`);
         }
     }
     if (coll == "Teachers") {
-        updatedDoc = await sm.collection('Teachers').updateOne({ name: { first: obj.name.first, last: obj.name.last }, father: obj.father }, { $set: { [toUpdate]: obj.updatedValue } },{returnNewDcoument:true})
+        updatedDoc = await sm.collection('Teachers').findOneAndUpdate({ name: { first: obj.name.first, last: obj.name.last }, father: obj.father }, { $set: { [obj.toUpdate]: obj.updatedValue } },{returnNewDcoument:true})
         if (!updatedDoc) {
             console.log("No mathced Data to update!")
+            return null;
         }
         else {
             console.log(`${updatedDoc.name.first}'s Profile updated!!`);
