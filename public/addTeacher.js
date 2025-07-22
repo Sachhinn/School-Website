@@ -8,7 +8,6 @@ async function sendData(mainElement) {
     for (const element of inputElements) {
         if(element.getAttribute('type') == 'radio'){
             if(!element.checked){
-                console.log(`${element.getAttribute('type')} was not checked. Skipping to another iteration`)
                 continue;
             }
         }
@@ -29,19 +28,18 @@ async function sendData(mainElement) {
     }
     for (let element of selectElements) {
         let insideElement = element.options[element.selectedIndex]
-            if(element.name.includes('.')){
+            if(element.name.includes('.')){    // means the value should be an object
                 let keys = element.name.split('.');
-                for (let i = 0; i < keys.length-1; i++) {
-                    if(!(keys[i] in obj)){
-                    obj[keys[i]] = {}
+                for (let i = 0; i < keys.length-1; i++) { // uptil the second last value
+                    if(!(keys[i] in obj)){ // if there's no parameter with that name
+                    obj[keys[i]] = {}// then create on
                     }
-                obj = obj[keys[i]]
+                obj = obj[keys[i]] // assigning the obj to the inner object. Note: it does not assign the input 
                 }
-                obj[keys[keys.length-1]] = element.value
-                obj = inputs;
+                obj[keys[keys.length-1]] = element.value // assigning the last value to last nested object
+                obj = inputs; // going back to the outermost object
             }
-            if(element.name in obj){
-                console.log(`${element.name} is in the object.`)
+            if(element.name in obj){  // for elements with same name but multiple values i.e. preferredSubjects
                 if (!Array.isArray(obj[element.name])){
                     temp = obj[element.name]
                     obj[element.name] = [temp , element.value]
@@ -55,14 +53,30 @@ async function sendData(mainElement) {
                 obj[element.name] = insideElement.value;
             }
         }
-    //assign the value of input elements to the names of the input within an object
-    //send the object as body of get requst
-    let a = await fetch('/teachers/new', {method:"POST",
+    //assigning the value of input elements to the names of the input within an object
+    //send the object as body of post requst
+    let a = fetch('/teachers/new', {method:"POST",
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify(inputs)
-    }).then(async response=>{
-        console.log(await response.json())
+    }).then(async response=> {
+        if(!response.ok){
+            if(response.status === 404){
+                throw new Error("Please check the details you mentioned!")
+            }
+            else{
+                throw new Error("Internal Error")
+            }
+        }
+        return response.json()
     })
+        .then( data =>{
+                console.log(data.message)
+                console.log(data.id)
+                window.location.href = `/profile/${data.id}?type=Teachers`   
+    })
+        .catch(error =>{
+            alert(error)
+        })
 }
 // sendData(document.getElementById('main-panel'))
 // function setNestedProperty(obj, path, value) {

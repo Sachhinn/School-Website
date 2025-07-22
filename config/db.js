@@ -1,4 +1,4 @@
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 import dotenv from "dotenv"
 dotenv.config()
 const uri = process.env.MONGO_URI
@@ -19,20 +19,49 @@ export const connectDB = async () => {
         console.log(`Error in db.js::: ${error.message}`);
     }
 }
+export const profile = async (col,id) =>{
+    let result = await sm.collection(col).findOne({_id:new ObjectId(id)})
+    return result;
+}
 
 export const countItem = async (coll, obj = {}) => {
     let count = await client.db('SchoolManagement').collection(coll).countDocuments(obj)
     return count;
+}
+export const update = async (coll , obj) =>{
+    let updatedDoc;
+    let response;
+     if (coll == "Students") {
+         updatedDoc = await sm.collection('Students').findOneAndUpdate({ name: { first: obj.name.first, last: obj.name.last }, father: obj.father }, { $set: { [obj.toUpdate]: obj.updatedValue } },{returnNewDcoument:true})
+        if (!updatedDoc) {
+            console.log("No mathced Data to update!")
+        }
+        else {
+            console.log(`${updatedDoc.name.first}'s Profile updated!!`);
+        }
+    }
+    if (coll == "Teachers") {
+        updatedDoc = await sm.collection('Teachers').updateOne({ name: { first: obj.name.first, last: obj.name.last }, father: obj.father }, { $set: { [toUpdate]: obj.updatedValue } },{returnNewDcoument:true})
+        if (!updatedDoc) {
+            console.log("No mathced Data to update!")
+        }
+        else {
+            console.log(`${updatedDoc.name.first}'s Profile updated!!`);
+        }
+    }
+    return updatedDoc ;
 }
 export const listDocument = async (coll) => {
     let allDocs = await client.db('SchoolManagement').collection(coll).find().toArray()
     return allDocs;
 }
 export const createDocument = async (coll, obj) => {
-    if (coll == "Students") {
+    if (coll === "Students") {
+        console.log("creating document in student")
         obj.fees = (await sm.collection('Fees').findOne({ 'className': (obj.forClass).toString() })).fees
     }
-    if (coll == "Teachers") {
+    if (coll === "Teachers") {
+        console.log("creating document in student")
         // write code to add a property salary 
         obj.salary = (await sm.collection('Salary').findOne({ 'PreferredClasses': obj.PreferredClasses })).salary
     }

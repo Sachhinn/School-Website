@@ -7,6 +7,7 @@ async function sendData() {
         document.getElementById('standard').value,
         document.getElementById('dob').value
     ]
+    const admission = document.getElementById("admissionDate").value;
     const genderRadios = document.getElementsByName('gender');
     let selectedGender = '';
     genderRadios.forEach(radio =>{
@@ -24,6 +25,7 @@ async function sendData() {
     })
     stud.push(selectedGender)
     stud.push(sCategory)
+    stud.push(admission)
     let obj = {
         name:{
             first:stud[0],
@@ -36,12 +38,18 @@ async function sendData() {
         category:stud[6],
         admissionDate:stud[7]
     }
-    let a =await  fetch('/admission/submit',{
+    let a =await  fetch('/addData',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
         body:JSON.stringify(obj)
-    }).then(async response=>{console.log(await response.json())})
-}
+    })
+    .then(async response=>{
+        response = await response.json()
+        console.log(response)
+        alert("The Student's ID is :"+response+":")
+        window.location.href = `/profile/${response}?type=Students`;
+    })
+    }
 async function readData(coll){
     let data = await fetch('/readData',{
         method:"POST",
@@ -51,14 +59,18 @@ async function readData(coll){
         return data
     })
     let i = 0;
+    let aTag;
     let mainc = document.getElementsByClassName('list-container')
     mainc = mainc[0]
     for (const element of data) {
         let container;
         if(element.name!==undefined){
+            aTag = document.createElement('a')
+            aTag.href=`/profile/${element._id.toString()}?type=${coll}`
             container = document.createElement('p')
             container.innerText = `${element.name.first} ${element.name.last}`;
-            mainc.appendChild(container)
+            mainc.appendChild(aTag)
+            aTag.appendChild(container)
         }
         else{
             i++;

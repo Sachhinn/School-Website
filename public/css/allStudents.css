@@ -7,6 +7,10 @@
     background-color: var(--pureWhite);
     border-left: 5px solid var(--purple);
 }
+.list-container a{
+    text-decoration: none;
+    color: inherit;
+}
 .main-panel h3{
     position: relative;
     display: inline-block;
