@@ -70,8 +70,7 @@ async function sendData(mainElement) {
         return response.json()
     })
         .then( data =>{
-                console.log(data.message)
-                console.log(data.id)
+                alert(data.message)
                 window.location.href = `/profile/${data.id}?type=Teachers`   
     })
         .catch(error =>{
