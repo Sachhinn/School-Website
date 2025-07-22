@@ -1,6 +1,6 @@
 import express from 'express';
 import cron from 'node-cron'
-import { connectDB, countItem, listDocument, sm, createDocument, income, expense, nonTeachingStaffSalaryExpense, TeachinStaffSalaryExpense, resetTeachersPaymentStatusMonthly, unpaidTeachers, unpaidStudents } from './config/db.js';
+import { connectDB, countItem, listDocument, sm, createDocument, income, expense, nonTeachingStaffSalaryExpense, TeachinStaffSalaryExpense, resetTeachersPaymentStatusMonthly, unpaidTeachers, unpaidStudents, profile , update } from './config/db.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 const __fileName = fileURLToPath(import.meta.url)
@@ -19,18 +19,18 @@ cron.schedule("0 0 0 1 * *", async () => {
 }, {
     timezone: "Asia/Kolkata"
 })
-app.use((req, res, next) => {
-  const visit = {
-    ip: req.ip,
-    path: req.originalUrl,
-    userAgent: req.headers['user-agent'],
-    time: new Date()
-  };
-  sm.collection('visits').insertOne(visit);
-  console.log(`A visit was made to your website:`)
-  console.log(visit.ip)
-  next();
-});
+// app.use((req, res, next) => {
+//   const visit = {
+//     ip: req.ip,
+//     path: req.originalUrl,
+//     userAgent: req.headers['user-agent'],
+//     time: new Date()
+//   };
+//   sm.collection('visits').insertOne(visit);
+//   console.log(`A visit was made to your website:`)
+//   console.log(visit.ip)
+//   next();
+// });
 app.get('/', async (req, res) => {
     const students = await countItem('Students');
     const teachers = await countItem('Teachers');
@@ -64,10 +64,20 @@ app.get('/Accounts', async (req, res) => {
     let upStudents = await unpaidStudents(5)
     res.render('accounts', { sendIncome, ntsSalary, tsSalary, otherExp, upTeachers, upStudents })
 })
-app.post('/admission/submit', async (req, res) => {
+app.get('/profile/:id',async (req,res) =>{
+    let Profile = await profile(req.query.type,req.params.id)
+    if (req.query.type === "Teachers"){
+        res.render("teacherProfile" , {stdProfile: Profile})
+    }
+    if (req.query.type === "Students"){
+        res.render("teacherProfile" ,{stdProfile: Profile})
+    }
+})
+app.post('/addData', async (req, res) => {
     let request = req.body;
-    await createDocument('Students', request)
-    res.send(JSON.stringify("Data added successfully"))
+    console.log(`Request for Admission: `)
+    let newAdmission = await createDocument('Students', request)
+    res.end(JSON.stringify(newAdmission.insertedId.toString()))
 })
 app.post('/readData', async (req, res) => {
     let coll = req.body;
@@ -81,52 +91,56 @@ app.post('/teachers/new', async (req, res) => {
     console.log(`Post request for Saving Data received::${i}`)
     let receivedData = req.body;
     if (receivedData.name.first != "" || receivedData.name.last != "" || receivedData.father != "") {
-        let doesExist = await sm.collection('Teachers').findOne({ name: { first: receivedData.name.first, last: receivedData.name.last } })
+        let doesExist = await sm.collection('Teachers').findOne({ name: { first: receivedData.name.first, last: receivedData.name.last },father:receivedData.father})
         if (!doesExist) {
-            await createDocument('Teachers', receivedData)
-            res.end(JSON.stringify("Data Inserted!!"))
+            let result = await createDocument('Teachers', receivedData)
+            res.status(200).json({message: "Profile Created" , id:result.insertedId})
         }
         else {
-            res.end(JSON.stringify("Error: Teacher's Data already exists"))
+            // res.status(404).send(JSON.stringify("Error: Teacher's Data already exists"))
+            res.status(404).send("Error: Teacher's Data already exists")
         }
     }
     else {
-        res.end(JSON.stringify("Please fill all the fieds!!"))
+        // res.status(404).send(JSON.stringify("Please fill all the fieds!!"))
+        res.status(404).send("Please fill all the fieds!!")
     }
 })
 app.post('/updateData', async (req, res) => {
     let requestedData = req.body
     let toUpdate = requestedData.toUpdate;
     console.log("Post Request at updateData!")
-    console.log(toUpdate)
+    console.log(toUpdate)   
     console.log(requestedData.updatedValue)
-    let response;
-    if (req.headers.update == "Students") {
+    let response = await update(req.headers.update , requestedData)
+    // if (req.headers.update == "Students") {
 
-        let update = await sm.collection('Students').updateOne({ name: { first: requestedData.name.first, last: requestedData.name.last }, father: requestedData.father }, { $set: { [toUpdate]: requestedData.updatedValue } })
-        if (update.matchedCount == 0) {
-            console.log("No mathced Data to update!")
-            response = "No matched Data to update!";
-        }
-        else {
-            console.log(`${update.modifiedCount} Document(s) updated!!`);
-            response = "Document(s) Updated"
-        }
-        res.end(JSON.stringify(response))
+    //     let update = await sm.collection('Students').findOneAndUpdate({ name: { first: requestedData.name.first, last: requestedData.name.last }, father: requestedData.father }, { $set: { [toUpdate]: requestedData.updatedValue } },{returnNewDcoument:true})
+    //     if (!update) {
+    //         console.log("No mathced Data to update!")
+    //         response = "No matched Data to update!";
+    //     }
+    //     else {
+    //         console.log(`${update.name.first}'s Profile updated!!`);
+    //         response = `${update.name.first}'s Profile updated!!`
+    //     }
+    //     res.end(JSON.stringify(response))
 
-    }
-    if (req.headers.update == "Teachers") {
-        let update = await sm.collection('Teachers').updateOne({ name: { first: requestedData.name.first, last: requestedData.name.last }, father: requestedData.father }, { $set: { [toUpdate]: requestedData.updatedValue } })
-        if (update.matchedCount == 0) {
-            console.log("No mathced Data to update!")
-            response = "No matched Data to update!";
-        }
-        else {
-            console.log(`${update.modifiedCount} Document(s) updated!!`);
-            response = "Document(s) Updated"
-        }
-        res.end(JSON.stringify(response))
-    }
+    // }
+    // if (req.headers.update == "Teachers") {
+    //     let update = await sm.collection('Teachers').updateOne({ name: { first: requestedData.name.first, last: requestedData.name.last }, father: requestedData.father }, { $set: { [toUpdate]: requestedData.updatedValue } },{returnNewDcoument:true})
+    //     if (!update) {
+    //         console.log("No mathced Data to update!")
+    //         response = "No matched Data to update!";
+    //     }
+    //     else {
+    //         console.log(`${update.name.first}'s Profile updated!!`);
+    //         response = `${update.name.first}'s Profile updated!!`
+    //     }
+    //     res.end(JSON.stringify(response))
+    // }
+    console.log(response._id)
+    res.end(JSON.stringify(response._id))
 })
 app.post('/deleteData', async (req, res) => {
     let requestedData = req.body;

@@ -1,3 +1,4 @@
+
 const mySelect = document.getElementById('update')
 let myLabel = document.getElementById('label-updated')
 let myInput = document.getElementById('updated')
@@ -19,9 +20,9 @@ mySelect.addEventListener('change', (event) => {
     document.getElementById('category').classList.add('hidden')
     document.getElementById('paymentStatus').classList.add('hidden')
     updateSelectedOption();
-    if (myValue == "dob") {
+    if (myValue == "dob" || myValue =="admissionDate") {
         myInput.type = "date"
-        myLabel.innerHTML = "Update Date of Birth: "
+        myLabel.innerHTML = `Update ${mySelect.options[mySelect.selectedIndex].innerHTML}`
     }
     else {
         myInput.type = 'text'
@@ -89,9 +90,12 @@ async function update(person) {
             'update': person
         },
         body: JSON.stringify(body)
-    }).then(async (response) => {
-        console.log(await response.json())
-    })
+    }).then(async response =>{
+        response = await response.json()
+        alert(`Profile Updated!!`)
+        window.location.href = `profile/${response}?type=Students`
+    }
+    )
 }
 
 async function updateTeacher() {
