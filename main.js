@@ -1,6 +1,7 @@
 import express from 'express';
-import cron from 'node-cron'
-import { connectDB, countItem, listDocument, sm, createDocument, income, expense, nonTeachingStaffSalaryExpense, TeachinStaffSalaryExpense, resetTeachersPaymentStatusMonthly, unpaidTeachers, unpaidStudents, profile , update } from './config/db.js';
+import cron from 'node-cron';
+import { ObjectId } from 'mongodb';
+import { connectDB, countItem, listDocument, sm, createDocument, income, expense, nonTeachingStaffSalaryExpense, TeachinStaffSalaryExpense, resetTeachersPaymentStatusMonthly, unpaidTeachers, unpaidStudents, profile, update } from './config/db.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 const __fileName = fileURLToPath(import.meta.url)
@@ -64,13 +65,14 @@ app.get('/Accounts', async (req, res) => {
     let upStudents = await unpaidStudents(5)
     res.render('accounts', { sendIncome, ntsSalary, tsSalary, otherExp, upTeachers, upStudents })
 })
-app.get('/profile/:id',async (req,res) =>{
-    let Profile = await profile(req.query.type,req.params.id)
-    if (req.query.type === "Teachers"){
-        res.render("teacherProfile" , {stdProfile: Profile})
+app.get('/profile/:id', async (req, res) => {
+    let Profile = await profile(req.query.type, req.params.id)
+
+    if (req.query.type === "Teachers") {
+        res.render("profile", { stdProfile: Profile })
     }
-    if (req.query.type === "Students"){
-        res.render("teacherProfile" ,{stdProfile: Profile})
+    if (req.query.type === "Students") {
+        res.render("profile", { stdProfile: Profile })
     }
 })
 app.post('/addData', async (req, res) => {
@@ -80,10 +82,10 @@ app.post('/addData', async (req, res) => {
     res.end(JSON.stringify(newAdmission.insertedId.toString()))
 })
 app.post('/readData', async (req, res) => {
-    let coll = req.body;
     let response = await sm.collection(req.body).find().toArray()
     res.setHeader('Content-Type', 'application/json')
     res.status(200)
+    console.log(response[0])
     res.end(JSON.stringify(response))
 })
 app.post('/teachers/new', async (req, res) => {
@@ -91,10 +93,10 @@ app.post('/teachers/new', async (req, res) => {
     console.log(`Post request for Saving Data received::${i}`)
     let receivedData = req.body;
     if (receivedData.name.first != "" || receivedData.name.last != "" || receivedData.father != "") {
-        let doesExist = await sm.collection('Teachers').findOne({ name: { first: receivedData.name.first, last: receivedData.name.last },father:receivedData.father})
+        let doesExist = await sm.collection('Teachers').findOne({ name: { first: receivedData.name.first, last: receivedData.name.last }, father: receivedData.father })
         if (!doesExist) {
             let result = await createDocument('Teachers', receivedData)
-            res.status(200).json({message: "Profile Created" , id:result.insertedId})
+            res.status(200).json({ message: "Profile Created", id: result.insertedId })
         }
         else {
             // res.status(404).send(JSON.stringify("Error: Teacher's Data already exists"))
@@ -110,9 +112,9 @@ app.post('/updateData', async (req, res) => {
     let requestedData = req.body
     let toUpdate = requestedData.toUpdate;
     console.log("Post Request at updateData!")
-    console.log(toUpdate)   
+    console.log(toUpdate)
     console.log(requestedData.updatedValue)
-    let response = await update(req.headers.update , requestedData)
+    let response = await update(req.headers.update, requestedData)
     // if (req.headers.update == "Students") {
 
     //     let update = await sm.collection('Students').findOneAndUpdate({ name: { first: requestedData.name.first, last: requestedData.name.last }, father: requestedData.father }, { $set: { [toUpdate]: requestedData.updatedValue } },{returnNewDcoument:true})
@@ -139,21 +141,32 @@ app.post('/updateData', async (req, res) => {
     //     }
     //     res.end(JSON.stringify(response))
     // }
-    if(!response){
+    if (!response) {
         res.status(404).send("No Profile matched the data")
     }
-    else{
+    else {
         res.end(JSON.stringify(response._id))
     }
 })
-app.post('/deleteData', async (req, res) => {
-    let requestedData = req.body;
-    let result = await db.collection('users').deleteOne({ name: requestedData.name })
-    console.log(result);
-    res.end();
-})
-app.post('/updateTeacher', (req, res) => {
-    //create a endpoint for updating teacher's data: Mainly Payment status
+app.post('/removeData', async (req, res) => {
+    let id = req.body;
+    let coll = req.headers.coll
+    try {
+        let result = await sm.collection(coll).findOne({ _id: new ObjectId(id) })
+        console.log(result)
+        if (result) {
+            result = await sm.collection(coll).deleteOne({ _id: new ObjectId(id) })
+            console.log(result);
+            res.status(200).send("Deleted Successfully!");
+        }
+        else {
+            res.status(404).send("Document not Found")
+        }
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).send("Server Error")
+    }
 })
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

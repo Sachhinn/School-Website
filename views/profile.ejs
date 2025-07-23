@@ -2,62 +2,96 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard: Profile</title>
-    <link rel="stylesheet" href="/css/index.css">
-    <link rel="stylesheet" href="/css/profile.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard: Profile</title>
+  <link rel="stylesheet" href="/css/index.css">
+  <link rel="stylesheet" href="/css/profile.css">
 </head>
 
 <body>
-    <div class="main">
+  <div class="main">
 
-        <%- include('template/side-panel') %>
-            <%- include('template/navbar') %>
-                <div class="main-panel">
+    <%- include('template/side-panel') %>
+      <%- include('template/navbar') %>
+        <div class="main-panel">
 
-                    <div class="main-section">
-                        <h2>Student Profile</h2>
+          <div class="main-section">
 
-                        <p><strong>Name:</strong>
-                            <%= stdProfile.name.first %>
-                                <%= stdProfile.name.last %>
-                        </p>
-                        <p><strong>Father's Name:</strong>
-                            <%= stdProfile.father %>
-                        </p>
-                        <p><strong>Class:</strong>
-                            <%= stdProfile.forClass %>
-                        </p>
-                        <p><strong>Date of Birth:</strong>
-                            <%= stdProfile.dob %>
-                        </p>
-                        <p><strong>Gender:</strong>
-                            <%= stdProfile.gender %>
-                        </p>
-                        <p><strong>Category:</strong>
-                            <%= stdProfile.category %>
-                        </p>
-                        <p><strong>Admission Date:</strong>
-                            <%= (stdProfile.admissionDate) %>
-                        </p>
-                        <p><strong>Fees:</strong> ₹<%= stdProfile.fees.toLocaleString() %>
-                        </p>
-                        <p><strong>Payment Status:</strong>
-                            <% if (stdProfile.paymentStatus==='Paid' ) { %>
-                                <span style="color: green; font-weight: bold;">Paid</span>
-                                <% } else { %>
-                                    <span style="color: red; font-weight: bold;">Not Paid</span>
-                                    <% } %>
-                        </p>
-                    </div>
-                    <span>
-                        <button onclick="history.back()">Go Back</button>
-                    </span>
+            <h2 id="profileof">Student Profile</h2>
 
-                </div>
-    </div>
+            <p><strong>Name:</strong>
+              <%= stdProfile.name.first %>
+                <%= stdProfile.name.last %>
+            </p>
+            <p><strong>Father's Name:</strong>
+              <%= stdProfile.father %>
+            </p>
+            <% if (stdProfile.forClass) { %>
+              <p><strong>Class:</strong>
+                <%= stdProfile.forClass %>
+              </p>
+              <% } %>
+                <p><strong>Date of Birth:</strong>
+                  <%= stdProfile.dob %>
+                </p>
+                <p><strong>Gender:</strong>
+                  <%= stdProfile.gender %>
+                </p>
+                <% if (stdProfile.category) { %>
+                  <p><strong>Category:</strong>
+                    <%= stdProfile.category %>
+                  </p>
+                  <% } %>
+                    <% if (stdProfile.admissionDate) { %>
+                      <p><strong>Admission Date:</strong>
+                        <%= (stdProfile.admissionDate) %>
+                      </p>
+                      <% } %>
+                        <% if (stdProfile.fees) { %>
+                          <p><strong>Fees:</strong> ₹<%= stdProfile.fees.toLocaleString() %>
+                          </p>
+                          <% } %>
+                            <% if (stdProfile.salary) { %>
+                              <p><strong>Salary:</strong> ₹<%= stdProfile.salary.toLocaleString() %>
+                              </p>
+                              <% } %>
+
+                                <% if (stdProfile.PreferredSubject) { %>
+                                  <p><strong>Preferred Subject:</strong>
+                                    <%= stdProfile.PreferredSubject %>
+                                  </p>
+
+                                  <% } %>
+                                    <% if (stdProfile.PreferredClasses) { %>
+                                      <p><strong>Preferred Classes:</strong>
+                                        <%= stdProfile.PreferredClasses %>
+                                      </p>
+                                      <% } %>
+                                        <p><strong>Payment Status:</strong>
+                                          <% if (stdProfile.paymentStatus==='Paid' ) { %>
+                                            <span style="color: green; font-weight: bold;">Paid</span>
+                                            <% } else { %>
+                                              <span style="color: red; font-weight: bold;">Not
+                                              Paid</span>
+                                              <% } %>
+                                        </p>
+                                        <div class="buttons">
+                                          <button onclick="remove()"> Delete </button>
+                                          <button onclick="update()">Update</button>
+                                        </div>
+          </div>
+          <span>
+            <button onclick="history.back()">Go Back</button>
+          </span>
+
+        </div>
+  </div>
 </body>
-<script></script>
+<script>
+  let profile = <%- JSON.stringify(stdProfile) %>
+</script>
+<script src="/profile.js">
+</script>
 
 </html>
