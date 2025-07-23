@@ -49,7 +49,7 @@ async function sendData() {
         alert("The Student's ID is :"+response+":")
         window.location.href = `/profile/${response}?type=Students`;
     })
-    }
+}
 async function readData(coll){
     let data = await fetch('/readData',{
         method:"POST",
@@ -58,26 +58,30 @@ async function readData(coll){
         let data = await response.json()
         return data
     })
+    let btn = document.getElementById("seemore")
+    btn.classList.add('hidden')
     let i = 0;
     let aTag;
     let mainc = document.getElementsByClassName('list-container')
     mainc = mainc[0]
-    for (const element of data) {
+    for (i = index; i < index+20 && i< data.length ; i++) {
         let container;
-        if(element.name!==undefined){
+        if(data[i].name!==undefined){
+
             aTag = document.createElement('a')
-            aTag.href=`/profile/${element._id.toString()}?type=${coll}`
+            aTag.href=`/profile/${data[i]._id.toString()}?type=${coll}`
             container = document.createElement('p')
-            container.innerText = `${element.name.first} ${element.name.last}`;
+            container.innerText = `${data[i].name.first} ${data[i].name.last}`;
             mainc.appendChild(aTag)
             aTag.appendChild(container)
         }
         else{
-            i++;
+            continue;
         }
     }
-    if (i>0){
-        console.log(`${i} person(s) does not have an actual name kindly check`)
+    if(i<data.length){
+        index+=20
+        btn.classList.remove('hidden')
     }
 }
 if(document.getElementById('Student-list')){
@@ -85,4 +89,19 @@ if(document.getElementById('Student-list')){
 }
 if(document.getElementById('Teachers-list')){
     readData('Teachers')
+}
+let index = 0
+let topbtn = document.getElementById('gototop')
+window.onscroll = function(){btnOnScroll()}
+function btnOnScroll(){
+    if(document.body.scrollTop >500 || document.documentElement.scrollTop > 500){
+        topbtn.classList.remove('hidden')
+    }
+    else{
+        topbtn.classList.add('hidden')
+    }
+}
+function scrollBack(){
+    document.body.scrollTop = 0
+    document.documentElement.scrollTop = 0
 }

@@ -29,6 +29,10 @@
     padding:5px 10px;
     cursor: pointer;
 }
+.buttons{
+    display: flex;
+    justify-content: space-evenly;
+}
 @media screen and (max-width:780px) {
     .main-panel{
         flex-direction: column;
@@ -39,5 +43,8 @@
     .main-section{
         max-width: 100%;
         margin:0;
+    }
+    .buttons button{
+        margin: 0;
     }
 }

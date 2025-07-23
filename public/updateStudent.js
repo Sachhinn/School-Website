@@ -1,4 +1,12 @@
+//Parsing data for form from the URL if redirected from another page---------------
+let queryString = new URLSearchParams(window.location.search)
+if (queryString.size) {
+    document.getElementById('first-name').value = queryString.get('firstName')
+        document.getElementById('last-name').value= queryString.get('lastName')
+        document.getElementById('father-name').value= queryString.get('father')
+}
 
+// UPDATE STUDENT----------------------------------------
 const mySelect = document.getElementById('update')
 let myLabel = document.getElementById('label-updated')
 let myInput = document.getElementById('updated')
@@ -95,56 +103,11 @@ async function update(coll) {
         if (response.ok) {
             response = await response.json()
             alert(`Profile Updated!!`)
-            window.location.href = `profile/${response}?type=${coll}`
+            window.location.href = `/profile/${response}?type=${coll}`
         }
         else {
             throw new Error("No Profile matched the data!")
         }
     }
     ).catch(err => alert(err))
-}
-
-async function updateTeacher() {
-    if (myValue == "gender") {
-        const gender = document.getElementsByName('gender')
-        gender.forEach(radio => {
-            if (radio.checked) {
-                toUpdate = radio.value;
-            }
-        })
-    }
-    if (myValue == "paymentStatus") {
-        const status = document.getElementsByName('paymentStatus')
-        status.forEach(radio => {
-            if (radio.checked) {
-                toUpdate = radio.value;
-            }
-        })
-    }
-    else {
-        toUpdate = myInput.value
-    }
-    let stud = [
-        document.getElementById('first-name').value,
-        document.getElementById('last-name').value,
-        document.getElementById('father-name').value,
-        myValue, // Detail to be updated
-        toUpdate //Updated data
-    ]
-    let body =
-    {
-        name: { first: stud[0], last: stud[1] },
-        father: stud[2],
-        toUpdate: stud[3],//parameter 
-        updatedValue: stud[4] //new value
-    }
-    let a = await fetch('/updateTeacher', {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-    }).then(async (response) => {
-        console.log(await response.json())
-    })
 }

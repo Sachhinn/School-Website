@@ -1,5 +1,6 @@
 @import url(./index.css);
-.list-container p{
+
+.list-container p {
     padding: 0 10px;
     font-family: sans-serif;
     line-height: 2em;
@@ -7,23 +8,38 @@
     background-color: var(--pureWhite);
     border-left: 5px solid var(--purple);
 }
-.list-container a{
+
+.list-container a {
     text-decoration: none;
     color: inherit;
 }
-.main-panel h3{
+
+.main-panel h3 {
     position: relative;
     display: inline-block;
     margin-top: 1em;
-    font-size:2em;
+    font-size: 2em;
     font-family: sans-serif;
-    &::after{
-        content:'';
+
+    &::after {
+        content: '';
         position: absolute;
         bottom: 0;
-        left:0;
+        left: 0;
         width: calc(100% + 2em);
-        height:3px;
+        height: 3px;
         background-color: var(--purple);
     }
+}
+.hidden{
+    display:none;
+}
+.main-panel button {
+    margin: 10px auto;
+    padding: 5px 10px;
+    font-size: 1em;
+    background-color: var(--purple);
+    color: white;
+    border: none;
+    cursor: pointer;
 }
